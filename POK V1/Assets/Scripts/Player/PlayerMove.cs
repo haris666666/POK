@@ -9,18 +9,18 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private int _speed;
 
-    [SerializeField] private WheelCollider _FL;
-    [SerializeField] private WheelCollider _FR;
-    [SerializeField] private WheelCollider _RL;
-    [SerializeField] private WheelCollider _RR;
+    [SerializeField] private WheelCollider _FL, _FR, _RL, _RR;
 
     [SerializeField] private Image _slider;
     [SerializeField] private GameObject _speedUpButton;
-    //private bool _removeSpeed;
 
-    private float _speedUpTimer = 0;
+    private float _speedUpTimer = 10;
+    private int _primordialSpeed; // изначальная скорость
 
-
+    private void Start()
+    {
+        _primordialSpeed = _speed;
+    }
 
     void Update()
     {
@@ -29,34 +29,41 @@ public class PlayerMove : MonoBehaviour
         _RL.motorTorque = _speed;
         _RR.motorTorque = _speed;
 
-        _FL.steerAngle = -_joystick.Vertical * 30;
-        _FR.steerAngle = -_joystick.Vertical * 30;
-
-        if(_speedUpTimer < 5)
+        if(_speedUpTimer < 10)
         {
             _speedUpTimer += Time.deltaTime;
             _speedUpButton.SetActive(false);
-            _slider.fillAmount = _speedUpTimer / 5;            
+            _slider.fillAmount = _speedUpTimer / 10;            
         }
 
 
-        if (_speedUpTimer > 5) _speedUpTimer = 5;
-        if (_speedUpTimer == 5)
+        if (_speedUpTimer > 10) _speedUpTimer = 10;
+        if (_speedUpTimer == 10)
         {
             _speedUpButton.SetActive(true);
             _slider.fillAmount = 1;
+        }
+
+        if(transform.rotation.y <= -45 || transform.rotation.y >= 45)
+        {
+            _FL.steerAngle = 0;
+            _FR.steerAngle = 0;
         }
 
     }
     
    public void SpeedUp()
    {
-        //_removeSpeed = true;
         _speedUpTimer = 0;
         _speed *= 5;
 
         StartCoroutine(SpeedDown());
    }
+    IEnumerator SpeedDown()
+    {
+        yield return new WaitForSeconds(3);
+        _speed /= 5;
+    }
     public int GetSpeed()
     {
         return _speed;
@@ -65,9 +72,29 @@ public class PlayerMove : MonoBehaviour
     {
         _speed = Speed;
     }
-    IEnumerator SpeedDown()
+    public void ButtonUp()
     {
-        yield return new WaitForSeconds(3);
-        _speed /= 5;
+
+        _FL.steerAngle = -10;
+        _FR.steerAngle = -10;
+        
+    }
+    public void ButtonDown()
+    {
+        _FL.steerAngle = 10;
+        _FR.steerAngle = 10;
+    }
+    public void ButtonStop()
+    {
+        _FL.steerAngle = 0;
+        _FR.steerAngle = 0;
+    }
+    public void ButtonBrakeDown()
+    {
+        _speed = -100;
+    }
+    public void ButtonBrakeUp()
+    {
+        _speed = _primordialSpeed;
     }
 }

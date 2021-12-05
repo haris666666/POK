@@ -8,7 +8,6 @@ public class Money : MonoBehaviour
     [SerializeField] private Text _countMoneyOutput;
     static private int _countMoney;
 
- 
     private void OnTriggerEnter(Collider collision)
     {
         if(collision.transform.tag == "Player")

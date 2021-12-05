@@ -9,27 +9,23 @@ public class MoneyTruckRay : MonoBehaviour
     private Ray _rayLeft, _rayRight;
     private RaycastHit _rayHitLeft, _rayHitRight;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        _rayLeft = new Ray(transform.position, transform.forward);
-        _rayRight = new Ray(transform.position, -transform.forward);
+        _rayLeft = new Ray(transform.position + new Vector3(0, 1, 5), transform.right);
+        _rayRight = new Ray(transform.position + new Vector3(0, 1, 5), -transform.right);
 
-        Debug.DrawRay(transform.position, transform.forward * 15, Color.red);
-        Debug.DrawRay(transform.position, -transform.forward * 15, Color.red);
-
+        Debug.DrawRay(transform.position + new Vector3(0, 1, 5), transform.right * 60, Color.red);
+        Debug.DrawRay(transform.position + new Vector3(0, 1, 5), -transform.right * 60, Color.red);
+        
         if (Physics.Raycast(_rayLeft, out _rayHitLeft))
         {
-            if (_rayHitLeft.transform.tag == "Player") _player.GetComponent<PlayerHealth>().AddDamage(100);
+            if (_rayHitLeft.transform.tag == "Player" && (_player.transform.position - transform.position).sqrMagnitude <= 120 * 120) 
+                    _player.GetComponent<PlayerHealth>().AddDamage(500);
         }
         if (Physics.Raycast(_rayRight, out _rayHitRight))
         {
-            if (_rayHitRight.transform.tag == "Player") _player.GetComponent<PlayerHealth>().AddDamage(100);
+            if (_rayHitRight.transform.tag == "Player" && (_player.transform.position - transform.position).sqrMagnitude <= 120 * 120)
+                    _player.GetComponent<PlayerHealth>().AddDamage(500);
         }
     }
 }

@@ -8,7 +8,7 @@ public class DestroyRoad : MonoBehaviour
    
     void Update()
     {
-        transform.position = new Vector3(0, -4, _player.transform.position.z - 100);
+        transform.position = new Vector3(0, -4, _player.transform.position.z - 300);
     }
     private void OnCollisionEnter(Collision collision)
     {

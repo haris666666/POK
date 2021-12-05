@@ -21,14 +21,14 @@ public class SpawnRoad : MonoBehaviour
     }
     IEnumerator CreateRoad()
     {
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.1f);
         _spawnPosZ += 15f;
         Instantiate(_road, _spawnPos, Quaternion.identity);
         StartCoroutine(RoadCycle());
     }
     IEnumerator RoadCycle()
     {
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.10f);
         StartCoroutine(CreateRoad());
     }
 }
